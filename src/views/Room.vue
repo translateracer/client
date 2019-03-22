@@ -12,7 +12,6 @@
 
       <div class="col-8 offset-2" v-if="!newPlayer">
         <h2>{{name}}</h2>
-        {{statusPlayer}}
         <div v-if="xi === this.author && status ==='pending' && Object.keys(players).length > 1" class="mb-3">
           <button class="btn btn-primary btn-lg my-5" @click="startGame()">Start Game</button>
           <button class="btn btn-primary btn-lg my-5" v-if="status==='started'">Game started</button>
@@ -21,6 +20,9 @@
             <a target="_blank" class="btn btn-primary btn-small"
                href="https://www.facebook.com/sharer/sharer.php?u=http%3A//localhost%3A8080/rooms/kH6C21seFTxSk7deaRxQ">Facebook</a>
           </div>
+        </div>
+        <div v-if="xi !== this.author && newPlayer" class="mb-3">
+          <button class="btn btn-primary btn-lg my-5">Waiting...</button>
         </div>
         <div class="alert" v-if="status === 'finished'">
           <h3 class="alert alert-success">Congratulation!!</h3>
@@ -63,11 +65,11 @@
           this.status = data.status;
           let winner = {};
           let score = 0;
-          this.statusPlayer = false;
+          let isFound = false;
+          this.newPlayer = false;
           for (let item in data.users) {
             if (this.xi !== item) {
-              this.newPlayer = true;
-              console.log(this.xi, item, this.statusPlayer, 'test');
+              isFound = true;
             }
             let prop = data.users[item];
             if (score < +prop.score) {
@@ -75,13 +77,14 @@
               winner = prop;
             }
           }
-          this.winner = winner
+          this.winner = winner;
+          this.newPlayer = !isFound;
         })
     },
     methods: {
       joinGame() {
         let newData = {};
-        newData[Math.random()] = {
+        newData[localStorage.racerId] = {
           name: 'uye',
           score: 0
         };
@@ -90,6 +93,7 @@
         this.$db.collection('rooms')
           .doc(this.id)
           .set(this.rooms)
+        this.newPlayer = false;
       },
       startGame() {
         this.$db.collection('rooms')
@@ -117,7 +121,7 @@
         status: ``,
         xi: ``,
         winner: ``,
-        newPlayer: true,
+        newPlayer: false,
         players: {}
       }
     }
