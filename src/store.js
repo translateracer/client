@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { log } from 'util';
-
+import db from '@/api/firebase'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -15,13 +14,17 @@ export default new Vuex.Store({
   },
   actions: {
     getQuestions() {
-      this.$db.collection('question')
-      .onSnapshot(function (querySnapshot) {
-        const data = querySnapshot.docs.map(function (doc) {
-          return { id: doc.id, ...doc.data() }
-        })
-        console.log(data);
-        
+
+      db
+      .collection('question')
+      .onSnapshot( (querySnapshot)=> {
+        console.log('onSnapshot')
+          const data = [];
+          querySnapshot.docs.forEach(doc => {
+            data.push({ id: doc.id, ...doc.data() })
+          })
+
+          this.allTask = data    
         commit('fecthQuestion', data)
       })
     }
