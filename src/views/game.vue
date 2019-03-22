@@ -54,6 +54,9 @@ export default {
       author: "",
       players: "",
       status: "",
+      answer: "",
+      score: 0,
+      startIndex: 0,
       questions: [
         {
           artiBahasa: ["mendapatkan", "memperoleh", "dapat", "mengambil"],
@@ -122,6 +125,25 @@ export default {
             console.log(err);
             
           })
+    this.$db
+      .collection("rooms")
+      .doc(id)
+      .onSnapshot(doc => {
+        this.id = doc.id;
+        let data = doc.data();
+        this.name = data.name;
+        this.author = data.author;
+        this.players = data.users;
+        this.status = data.status;
+      });
+  },
+  methods: {
+    submitAnswer(payload) {
+      console.log(payload);
+
+      if (payload.artiBahasa.indexOf(this.answer) !== -1) {
+        this.startIndex += 1;
+        this.score += 10;
         // console.log(this.startIndex,"====");
       }
     }
