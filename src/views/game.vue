@@ -6,7 +6,7 @@
         <div v-for="(player,index) in players">
           <p>{{player.name}}</p>
           <div class="progress" >
-            
+
             <div
               v-bind:style="{width : player.score+'%'}"
               class="progress-bar"
@@ -64,7 +64,7 @@ export default {
       author: "",
       players: "",
       status: "",
-    
+
     };
   },
   created() {
@@ -102,9 +102,9 @@ export default {
             data.push({ id: doc.id, ...doc.data() })
           })
 
-          // this.allTask = data 
+          // this.allTask = data
           console.log(data);
-             
+
         this.$store.dispatch('fetchQuestion', data)
 
       })
@@ -155,7 +155,9 @@ export default {
       return this.players;
     },
     questions() {
-      return this.$store.state.questions
+      return this.$store.state.questions.sort(function func(a, b) {
+        return 0.5 - Math.random();
+      })
     }
   }
 };
