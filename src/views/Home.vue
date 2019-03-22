@@ -63,7 +63,8 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch('getQuestions')
+    this.getQuestion()
+    // this.$store.dispatch('getQuestions')
   },
   mounted() {
     if (localStorage.getItem('racerName')) {
@@ -87,7 +88,7 @@ export default {
     },
     getQuestion() {
 
-      $db
+      this.$db
       .collection('question')
       .onSnapshot( (querySnapshot)=> {
         console.log('onSnapshot')
@@ -96,8 +97,11 @@ export default {
             data.push({ id: doc.id, ...doc.data() })
           })
 
-          this.allTask = data    
-        commit('fecthQuestion', data)
+          // this.allTask = data 
+          console.log(data);
+             
+        this.$store.dispatch('fetchQuestion', data)
+
       })
     }
   },
