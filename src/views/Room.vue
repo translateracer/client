@@ -89,7 +89,7 @@
       joinGame() {
         let newData = {};
         newData[localStorage.racerId] = {
-          name: 'uye',
+          name: localStorage.name,
           score: 0
         };
         Object.assign(this.rooms['users'], newData);
