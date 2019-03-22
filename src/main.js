@@ -1,14 +1,14 @@
 import Vue from 'vue';
+import firebase from 'firebase/app';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import firebase from 'firebase/app';
-import 'firebase/firestore'
+import 'firebase/firestore';
 
 Vue.config.productionTip = false;
 
 // Initialize Firebase
-var config = {
+const config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
   authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
   databaseURL: process.env.VUE_APP_FIREBASE_DATABASE_URL,
