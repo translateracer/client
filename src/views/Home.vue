@@ -7,12 +7,13 @@
           <br><br><br>
           <div v-if="isSession">
               <div id="row">
-                <button type="button" class="btn btn-lg" data-toggle="modal"><router-link to="/rooms">
+                <button type="button" class="btn btn-outline-warning btn-lg" data-toggle="modal"><router-link to="/rooms">
                 Translate Me Please </router-link>
                 </button>
               </div>
+              <br>
               <div id="row">
-                <button type="button" class="btn btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
                 New Player Name 
                 </button>
               </div>
