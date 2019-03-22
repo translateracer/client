@@ -62,6 +62,10 @@ export default {
       racerId: '',
     };
   },
+  created() {
+    this.getQuestion()
+    // this.$store.dispatch('getQuestions')
+  },
   mounted() {
     if (localStorage.getItem('racerName')) {
       this.isSession = true;
@@ -69,6 +73,7 @@ export default {
       this.isSession = false;
     }
   },
+
   methods: {
     setName(input) {
       console.log('masuk sini', input);
@@ -80,6 +85,24 @@ export default {
     getRandomId() {
       //The maximum is 10 millions and minimum 1 million
       return Math.floor(Math.random() * (10000000 - 1000000)) + 1000000; 
+    },
+    getQuestion() {
+
+      this.$db
+      .collection('question')
+      .onSnapshot( (querySnapshot)=> {
+        console.log('onSnapshot')
+          const data = [];
+          querySnapshot.docs.forEach(doc => {
+            data.push({ id: doc.id, ...doc.data() })
+          })
+
+          // this.allTask = data 
+          console.log(data);
+             
+        this.$store.dispatch('fetchQuestion', data)
+
+      })
     }
   },
 };

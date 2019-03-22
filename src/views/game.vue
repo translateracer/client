@@ -22,6 +22,7 @@
     </div>
     <div class="row">
       <div class="col-6 align-self-center">
+        <div>
         <div class="card bg-primary text-white text-center p-3">
           <blockquote class="blockquote mb-0">
             <p>{{activeQuestion.kataAsal}}</p>
@@ -46,6 +47,7 @@
           >next Question</button>
         </form>
       </div>
+      </div>
     </div>
   </div>
 </template>
@@ -63,26 +65,11 @@ export default {
       author: "",
       players: "",
       status: "",
-      questions: [
-        {
-          artiBahasa: ["mendapatkan", "memperoleh", "dapat", "mengambil"],
-          bahasaAsal: "English",
-          kataAsal: "get"
-        },
-        {
-          artiBahasa: ["makan"],
-          bahasaAsal: "English",
-          kataAsal: "eat"
-        },
-        {
-          artiBahasa: ["minum"],
-          bahasaAsal: "English",
-          kataAsal: "drink"
-        }
-      ]
+    
     };
   },
   created() {
+    this.getQuestion()
     this.$db
       .collection("rooms")
       .doc(this.id)
@@ -105,6 +92,24 @@ export default {
       });
   },
   methods: {
+     getQuestion() {
+
+      this.$db
+      .collection('question')
+      .onSnapshot( (querySnapshot)=> {
+        console.log('onSnapshot')
+          const data = [];
+          querySnapshot.docs.forEach(doc => {
+            data.push({ id: doc.id, ...doc.data() })
+          })
+
+          // this.allTask = data 
+          console.log(data);
+             
+        this.$store.dispatch('fetchQuestion', data)
+
+      })
+    },
     skipQuestion() {
       this.startIndex += 1;
     },
@@ -146,6 +151,9 @@ export default {
     },
     activePlayers() {
       return this.players;
+    },
+    questions() {
+      return this.$store.state.questions
     }
   }
 };
