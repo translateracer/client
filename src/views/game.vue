@@ -2,10 +2,14 @@
   <div class="container">
     <div class="row">
       <div class="col-6">
-        {{curret}}
-        <div class="progress">
+        {{currentPlayer.score}}
+        {{players}}
+        <div class="progress" v-for="(player,index) in players">
+          <p>
+            <!-- {{player.name}} -->
+          </p>
           <div
-            v-bind:style="{width : score+'%'}"
+            v-bind:style="{width : players[index].score+'%'}"
             class="progress-bar"
             role="progressbar"
             aria-valuenow="25"
@@ -46,19 +50,8 @@ export default {
   data() {
     return {
       id: this.$router.currentRoute.params.id,
-<<<<<<< HEAD
       answer: "",
-      score: 0,
-      startIndex: 0,
-      data: "",
-      name: "",
-      author: "",
-      players: "",
-      status: "",
-=======
->>>>>>> rebase newest data
-      answer: "",
-      score: 0,
+
       startIndex: 0,
       data: "",
       name: "",
@@ -85,58 +78,9 @@ export default {
     };
   },
   created() {
-    this.snapshot()
-    // this.$db
-    //   .collection("rooms")
-    //   .doc(this.id)
-    //   .onSnapshot(doc => {
-    //     this.id = doc.id;
-    //     let data = doc.data();
-    //     this.name = data.name;
-    //     this.author = data.author;
-    //     this.players = data.users;
-    //     this.status = data.status;
-    //   });
-<<<<<<< HEAD
-  },
-  methods: {
-    snapshot() {
-      this.$db
-        .collection("rooms")
-        .doc(this.id)
-        .onSnapshot(doc => {
-          this.id = doc.id;
-          let data = doc.data();
-          this.name = data.name;
-          this.author = data.author;
-          this.players = data.users;
-          this.status = data.status;
-        });
-    },
-    submitAnswer(payload) {
-      console.log(payload);
-      let obj;
-      if (payload.artiBahasa.indexOf(this.answer) !== -1) {
-        this.startIndex += 1;
-        this.score += 10;
-        this.currentPlayer.score = this.score;
-        this.$db
-          .collection("rooms")
-          .doc(this.id)
-          .update({
-            "users.1.score": this.currentPlayer.score
-          })
-          .then(() => {
-            this.snapshot()
-            // this.$router.replace("/games/" + this.id);
-          })
-          .catch(err => {
-            console.log(err);
-            
-          })
     this.$db
       .collection("rooms")
-      .doc(id)
+      .doc(this.id)
       .onSnapshot(doc => {
         this.id = doc.id;
         let data = doc.data();
@@ -144,46 +88,42 @@ export default {
         this.author = data.author;
         this.players = data.users;
         this.status = data.status;
+        for (let i in this.players) {
+          if (this.players[i].score >= 100) {
+            let payload = {
+              "status" : "finished"
+            }
+            this.updateRoom(payload)
+            this.$router.replace(`/rooms/${this.id}`)
+          }
+        }
       });
-=======
->>>>>>> rebase newest data
   },
   methods: {
-    snapshot() {
-      this.$db
-        .collection("rooms")
-        .doc(this.id)
-        .onSnapshot(doc => {
-          this.id = doc.id;
-          let data = doc.data();
-          this.name = doc.name;
-          this.author = doc.author;
-          this.players = doc.users;
-          this.status = doc.status;
-        });
-    },
     submitAnswer(payload) {
-      console.log(payload);
       let obj;
       if (payload.artiBahasa.indexOf(this.answer) !== -1) {
         this.startIndex += 1;
-        this.score += 10;
-        this.currentPlayer.score = this.score;
-        this.$db
-          .collection("rooms")
-          .doc(this.id)
-          .update({
-            "users.1.score": this.currentPlayer.score
-          })
-          .then(() => {
-            // this.$router.replace("/games/" + this.id);
-          })
-          .catch(err => {
-            console.log(err);
-            
-          })
-        // console.log(this.startIndex,"====");
+        this.currentPlayer.score += 10;
+        let payload = {
+          "users.1.score": this.currentPlayer.score
+        };
+        this.updateRoom(payload);
+    
       }
+    },
+    updateRoom(payload) {
+      this.$db
+        .collection("rooms")
+        .doc(this.id)
+        .update(payload)
+        .then(() => {
+          // this.snapshot();
+          // this.$router.replace("/games/" + this.id);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   computed: {
@@ -191,9 +131,10 @@ export default {
       return this.players[1];
     },
     activeQuestion() {
-      console.log("masuk sini");
-
       return this.questions[this.startIndex];
+    },
+    activePlayers() {
+      return this.players;
     }
   }
 };
