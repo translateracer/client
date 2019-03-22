@@ -46,17 +46,6 @@ export default {
   data() {
     return {
       id: this.$router.currentRoute.params.id,
-<<<<<<< HEAD
-      answer: "",
-      score: 0,
-      startIndex: 0,
-      data: "",
-      name: "",
-      author: "",
-      players: "",
-      status: "",
-=======
->>>>>>> rebase newest data
       answer: "",
       score: 0,
       startIndex: 0,
@@ -97,56 +86,6 @@ export default {
     //     this.players = data.users;
     //     this.status = data.status;
     //   });
-<<<<<<< HEAD
-  },
-  methods: {
-    snapshot() {
-      this.$db
-        .collection("rooms")
-        .doc(this.id)
-        .onSnapshot(doc => {
-          this.id = doc.id;
-          let data = doc.data();
-          this.name = data.name;
-          this.author = data.author;
-          this.players = data.users;
-          this.status = data.status;
-        });
-    },
-    submitAnswer(payload) {
-      console.log(payload);
-      let obj;
-      if (payload.artiBahasa.indexOf(this.answer) !== -1) {
-        this.startIndex += 1;
-        this.score += 10;
-        this.currentPlayer.score = this.score;
-        this.$db
-          .collection("rooms")
-          .doc(this.id)
-          .update({
-            "users.1.score": this.currentPlayer.score
-          })
-          .then(() => {
-            this.snapshot()
-            // this.$router.replace("/games/" + this.id);
-          })
-          .catch(err => {
-            console.log(err);
-            
-          })
-    this.$db
-      .collection("rooms")
-      .doc(id)
-      .onSnapshot(doc => {
-        this.id = doc.id;
-        let data = doc.data();
-        this.name = data.name;
-        this.author = data.author;
-        this.players = data.users;
-        this.status = data.status;
-      });
-=======
->>>>>>> rebase newest data
   },
   methods: {
     snapshot() {
