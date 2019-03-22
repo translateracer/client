@@ -2,8 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-6 offset 3">
-        {{currentPlayer.score}}
-        {{players}}
+
         <div v-for="(player,index) in players">
           <p>{{player.name}}</p>
           <div class="progress" >
@@ -126,6 +125,9 @@ export default {
         audio.play();
 
         this.updateRoom(payload);
+      } else {
+        let audio = new Audio("/assets/mp3/fail-buzzer.mp3");
+        audio.play();
       }
     },
     updateRoom(payload) {
