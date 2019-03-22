@@ -22,6 +22,11 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     },
     {
+      path :'/game',
+      name : 'game',
+      component : () => import(/* webpackChunkName: "game" */ './views/game.vue')
+    },
+    {
       path: '/rooms/:id',
       name: 'Rooms',
       component: () => import(/* webpackChunkName: "about" */ './views/Room.vue'),
