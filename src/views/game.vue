@@ -2,11 +2,9 @@
   <div class="container">
     <div class="row">
       <div class="col-6 offset 3">
-
         <div v-for="(player,index) in players">
           <p>{{player.name}}</p>
-          <div class="progress" >
-            
+          <div class="progress">
             <div
               v-bind:style="{width : player.score+'%'}"
               class="progress-bar"
@@ -22,30 +20,36 @@
     <div class="row">
       <div class="col-6 align-self-center">
         <div>
-        <div class="card bg-primary text-white text-center p-3">
-          <blockquote class="blockquote mb-0">
-            <p>{{activeQuestion.kataAsal}}</p>
-          </blockquote>
-        </div>
-        <form class="form-inline" @submit.prevent="submitAnswer(activeQuestion)">
-          <div class="form-group mx-sm-3 mb-2">
-            <label for="inputPassword2" class="sr-only">Answer here</label>
-            <input
-              v-model="answer"
-              type="text"
-              class="form-control"
-              id="inputPassword2"
-              placeholder="Your Answer"
-            >
+          <div class="card bg-primary text-white text-center p-3">
+            <blockquote class="blockquote mb-0">
+              <p>Bahasa Asal: {{activeQuestion.bahasaAsal}}</p>
+              <p>{{activeQuestion.kataAsal}}</p>
+            </blockquote>
           </div>
-          <button type="submit" class="btn btn-primary mb-2">submit</button>
-          <button
-            type="button"
-            class="btn btn-primary mb-2"
-            @click.prevent="skipQuestion"
-          >next Question</button>
-        </form>
-      </div>
+          <form class="form-inline" @submit.prevent="submitAnswer(activeQuestion)">
+            <div class="form-group mx-sm-3 mb-2">
+              <label for="inputPassword2" class="sr-only">Answer here</label>
+              <input
+                v-model="answer"
+                type="text"
+                class="form-control"
+                id="inputPassword2"
+                placeholder="Your Answer"
+              >
+            </div>
+            <div>
+            
+            <button type="submit" class="btn btn-primary mb-2 ml-2">submit</button>
+            </div>
+            <div>
+            <button
+              type="button"
+              class="btn btn-primary mb-2"
+              @click.prevent="skipQuestion"
+            >next Question</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -63,12 +67,11 @@ export default {
       name: "",
       author: "",
       players: "",
-      status: "",
-    
+      status: ""
     };
   },
   created() {
-    this.getQuestion()
+    this.getQuestion();
     this.$db
       .collection("rooms")
       .doc(this.id)
@@ -91,25 +94,23 @@ export default {
       });
   },
   methods: {
-     getQuestion() {
+    getQuestion() {
+      this.$db.collection("question").onSnapshot(querySnapshot => {
+        console.log("onSnapshot");
+        const data = [];
+        querySnapshot.docs.forEach(doc => {
+          data.push({ id: doc.id, ...doc.data() });
+        });
 
-      this.$db
-      .collection('question')
-      .onSnapshot( (querySnapshot)=> {
-        console.log('onSnapshot')
-          const data = [];
-          querySnapshot.docs.forEach(doc => {
-            data.push({ id: doc.id, ...doc.data() })
-          })
+        // this.allTask = data
+        console.log(data);
 
-          // this.allTask = data 
-          console.log(data);
-             
-        this.$store.dispatch('fetchQuestion', data)
-
-      })
+        this.$store.dispatch("fetchQuestion", data);
+      });
     },
     skipQuestion() {
+      let audio = new Audio("/assets/mp3/_next-question.mp3");
+      audio.play();
       this.startIndex += 1;
     },
     submitAnswer(payload) {
@@ -155,7 +156,7 @@ export default {
       return this.players;
     },
     questions() {
-      return this.$store.state.questions
+      return this.$store.state.questions;
     }
   }
 };
