@@ -6,10 +6,33 @@
         
         <div id="roomentercontent">
          <!-- Button trigger modal for New Room-->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createRoomModal">
-        Create New Room
-        </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createRoomModal">
+            Create New Room
+            </button>
 
+            
+            <br>
+            <div class="container">
+                <div class="row">
+                    <div class="col-4 mb-3" v-for="room in rooms" :key="room.id">
+                        <div class="card mx-auto"><h2><center><strong>{{ room.name }}</strong></center></h2>
+
+                            <div class="card-body">
+                                Made by {{ room.author }} <br>
+                                <div class="row" style="padding:5px">
+                                    <div class="col-sm-12">
+                                        <!-- Button to join rooms -->
+                                        <button @click="xx" type="button" class="btn btn-primary">
+                                            <router-link :to="'/rooms/' + room.id "> Enter Room </router-link>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Modal for New Room -->
         <div class="modal fade" id="createRoomModal" tabindex="-1" role="dialog" aria-labelledby="createRoomModalTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -30,28 +53,6 @@
               </div>
               </div>
           </div>
-        </div>
-        <br>
-        <div class="container">
-            <div class="row">
-                <div class="col-4 mb-3" v-for="room in rooms" :key="room.id">
-                    <div class="card mx-auto"><h2><center><strong>{{ room.name }}</strong></center></h2>
-
-                        <div class="card-body">
-                            Made by {{ room.author }} <br>
-                            <div class="row" style="padding:5px">
-                                <div class="col-sm-12">
-                                    <!-- Button to join rooms -->
-                                    <button @click="xx" type="button" class="btn btn-primary">
-                                        <router-link :to="'/rooms/' + room.id "> Enter Room </router-link>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         </div>
     </div>
 </template>
