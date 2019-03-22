@@ -22,6 +22,7 @@
     </div>
     <div class="row">
       <div class="col-6 align-self-center">
+        <div>
         <div class="card bg-primary text-white text-center p-3">
           <blockquote class="blockquote mb-0">
             <p>{{activeQuestion.kataAsal}}</p>
@@ -45,6 +46,7 @@
             @click.prevent="skipQuestion"
           >next Question</button>
         </form>
+      </div>
       </div>
     </div>
   </div>

@@ -62,6 +62,9 @@ export default {
       racerId: '',
     };
   },
+  created() {
+    this.$store.dispatch('getQuestions')
+  },
   mounted() {
     if (localStorage.getItem('racerName')) {
       this.isSession = true;
@@ -69,6 +72,7 @@ export default {
       this.isSession = false;
     }
   },
+
   methods: {
     setName(input) {
       console.log('masuk sini', input);
