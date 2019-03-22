@@ -20,8 +20,7 @@
           </div>
           <div v-if="!isSession">
               <!-- Button trigger modal -->
-              isSession false
-              <button type="button" class="btn btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
+              <button type="button" class="btn btn-outline-warning btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
               Translate Me
               </button>
           </div>
@@ -43,8 +42,8 @@
                     <input type="text" v-model="nama" placeholder="Your Name Here"><br>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @click.prevent="setName(nama)" data-dismiss="modal"><router-link to="/rooms"> Enter Game </router-link></button>
+                    <button type="button" class="btn btn-outline-danger btn-lg" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning btn-lg" @click.prevent="setName(nama)" data-dismiss="modal"><router-link to="/rooms"> Enter Game </router-link></button>
                 </div>
                 </div>
             </div>
@@ -76,7 +75,7 @@ export default {
 
   methods: {
     setName(input) {
-      console.log('masuk sini', input);
+
       localStorage.setItem('racerName', input);
       localStorage.setItem('racerId', this.getRandomId())
       this.nama ='';
