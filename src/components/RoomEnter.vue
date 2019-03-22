@@ -22,7 +22,7 @@
                                 <div class="row" style="padding:5px">
                                     <div class="col-sm-12">
                                         <!-- Button to join rooms -->
-                                        <button @click="xx" type="button" class="btn btn-primary">
+                                        <button type="button" class="btn btn-outline-warning btn-lg">
                                             <router-link :to="'/rooms/' + room.id "> Enter Room </router-link>
                                         </button>
                                     </div>
@@ -74,9 +74,16 @@ export default {
         this.rooms = [];
         console.log('hasil tarik data room', roomdata);
         roomdata.forEach(doc => {
-          console.log(doc.id)
-          console.log(doc.data())
-          this.rooms.push(doc.data());
+        //   console.log(doc.id)
+        //   console.log(doc.data())
+
+          this.rooms.push({
+              id: doc.id,
+              author: doc.data().author,
+              name:doc.data().name,
+              status:doc.data().status,
+              users: doc.data().users
+          });
         });
         console.log("hasil looping", this.rooms)
       });
