@@ -1,17 +1,10 @@
 <template>
-  <div class="home">
-        <div v-if="isSession">
-            <button type="button" class="btn purple-gradient btn-lg" data-toggle="modal"><router-link to="/rooms">
-            Enter Game </router-link>
-            </button>
-        </div>
-        <div v-if="!isSession">
-            <!-- Button trigger modal -->
-            isSession false
-            <button type="button" class="btn purple-gradient btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
-            Enter Game
-            </button> 
-        </div>
+    <div>
+         <!-- Button trigger modal for New Room-->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createRoomModal">
+        Create New Room
+        </button>
+
         <!-- Modal for Unregistered Player -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -33,12 +26,17 @@
               </div>
           </div>
         </div>
+        
+        <div class="">
+           
+            
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'userenter',
+    name: 'roomenter',
     data() {
         return {
             isSession: false,
@@ -46,17 +44,14 @@ export default {
         }
     },
     mounted(){
-        if(localStorage.getItem("racerName")){
+        if(window.sessionStorage){
             this.isSession=true;
         } else {
-            this.isSession=false;
+            this.isSession=true;
         }
-    },
-    methods:{
-      setName(input) {
-        console.log("masuk sini", input)
-        localStorage.setItem('racerName', input)
-      }
     }
+    // methods: {
+
+    // },
 }
 </script>
