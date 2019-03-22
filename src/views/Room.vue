@@ -54,6 +54,7 @@
     name: "Rooms",
     mounted() {
       this.xi = localStorage.racerId;
+      console.log(this.xi);
       this.getRoomById(this.$router.currentRoute.params.id)
         .onSnapshot((doc) => {
           this.rooms = doc.data();
@@ -68,7 +69,7 @@
           let isFound = false;
           this.newPlayer = false;
           for (let item in data.users) {
-            if (this.xi !== item) {
+            if (this.xi === item) {
               isFound = true;
             }
             let prop = data.users[item];
@@ -79,6 +80,9 @@
           }
           this.winner = winner;
           this.newPlayer = !isFound;
+          if (isFound && this.status === 'started') {
+            this.$router.replace('/games/' + this.id)
+          }
         })
     },
     methods: {
@@ -89,10 +93,9 @@
           score: 0
         };
         Object.assign(this.rooms['users'], newData);
-        console.log(this.rooms);
         this.$db.collection('rooms')
           .doc(this.id)
-          .set(this.rooms)
+          .set(this.rooms);
         this.newPlayer = false;
       },
       startGame() {
