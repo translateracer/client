@@ -9,8 +9,10 @@
       </form>
     </div>
     <div class="row">
-      <div class="col-8 offset-2">
+
+      <div class="col-8 offset-2" v-if="!newPlayer">
         <h2>{{name}}</h2>
+        {{statusPlayer}}
         <div v-if="xi === this.author && status ==='pending' && Object.keys(players).length > 1" class="mb-3">
           <button class="btn btn-primary btn-lg my-5" @click="startGame()">Start Game</button>
           <button class="btn btn-primary btn-lg my-5" v-if="status==='started'">Game started</button>
@@ -24,6 +26,12 @@
           <h3 class="alert alert-success">Congratulation!!</h3>
           <h2><strong>{{winner.name}}</strong></h2>
           <h3>{{winner.score}}</h3>
+        </div>
+      </div>
+      <div class="col-8 offset-2" v-else>
+        <h2>{{name}}</h2>
+        <div class="mb-3">
+          <button class="btn btn-primary btn-lg my-5" @click="joinGame()">Join Room</button>
         </div>
       </div>
       <ul class="col-8 offset-2 list-group text-left">
@@ -46,6 +54,7 @@
       this.xi = localStorage.racerId;
       this.getRoomById(this.$router.currentRoute.params.id)
         .onSnapshot((doc) => {
+          this.rooms = doc.data();
           this.id = doc.id;
           let data = doc.data();
           this.name = data.name;
@@ -54,7 +63,12 @@
           this.status = data.status;
           let winner = {};
           let score = 0;
+          this.statusPlayer = false;
           for (let item in data.users) {
+            if (this.xi !== item) {
+              this.newPlayer = true;
+              console.log(this.xi, item, this.statusPlayer, 'test');
+            }
             let prop = data.users[item];
             if (score < +prop.score) {
               score = prop.score;
@@ -65,6 +79,18 @@
         })
     },
     methods: {
+      joinGame() {
+        let newData = {};
+        newData[Math.random()] = {
+          name: 'uye',
+          score: 0
+        };
+        Object.assign(this.rooms['users'], newData);
+        console.log(this.rooms);
+        this.$db.collection('rooms')
+          .doc(this.id)
+          .set(this.rooms)
+      },
       startGame() {
         this.$db.collection('rooms')
           .doc(this.id)
@@ -84,12 +110,14 @@
     },
     data() {
       return {
+        rooms: {},
         id: ``,
         name: ``,
         author: ``,
         status: ``,
         xi: ``,
         winner: ``,
+        newPlayer: true,
         players: {}
       }
     }
