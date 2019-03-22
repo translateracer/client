@@ -1,4 +1,5 @@
 # client
+# Game Racer
 
 ## Project setup
 ```
