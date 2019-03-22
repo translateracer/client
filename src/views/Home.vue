@@ -6,9 +6,17 @@
         <div class="content">
           <br><br><br>
           <div v-if="isSession">
-              <button type="button" class="btn btn-lg" data-toggle="modal"><router-link to="/rooms">
-              Translate Me Please </router-link>
-              </button>
+              <div id="row">
+                <button type="button" class="btn btn-outline-warning btn-lg" data-toggle="modal"><router-link to="/rooms">
+                Translate Me Please </router-link>
+                </button>
+              </div>
+              <br>
+              <div id="row">
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
+                New Player Name 
+                </button>
+              </div>
           </div>
           <div v-if="!isSession">
               <!-- Button trigger modal -->
@@ -17,8 +25,11 @@
               Translate Me
               </button>
           </div>
-          <!-- Modal for Unregistered Player -->
-          <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          
+          
+        </div>
+        <!-- Modal for Unregistered Player -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -38,8 +49,7 @@
                 </div>
             </div>
           </div>
-        </div>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -49,6 +59,7 @@ export default {
     return {
       isSession: false,
       nama: '',
+      racerId: '',
     };
   },
   mounted() {
@@ -62,7 +73,14 @@ export default {
     setName(input) {
       console.log('masuk sini', input);
       localStorage.setItem('racerName', input);
+      localStorage.setItem('racerId', this.getRandomId())
+      this.nama ='';
+      this.racerId='';
     },
+    getRandomId() {
+      //The maximum is 10 millions and minimum 1 million
+      return Math.floor(Math.random() * (10000000 - 1000000)) + 1000000; 
+    }
   },
 };
 </script>
