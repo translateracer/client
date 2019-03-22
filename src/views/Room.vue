@@ -52,9 +52,8 @@
 <script>
   export default {
     name: "Rooms",
-    mounted() {
-      this.xi = localStorage.racerId;
-      console.log(this.xi);
+    created() {
+      this.xi = localStorage.racerName;
       this.getRoomById(this.$router.currentRoute.params.id)
         .onSnapshot((doc) => {
           this.rooms = doc.data();
@@ -69,7 +68,7 @@
           let isFound = false;
           this.newPlayer = false;
           for (let item in data.users) {
-            if (this.xi === item) {
+            if (this.xi === data.users[item].name) {
               isFound = true;
             }
             let prop = data.users[item];
@@ -89,7 +88,7 @@
       joinGame() {
         let newData = {};
         newData[localStorage.racerId] = {
-          name: localStorage.name,
+          name: localStorage.racerName,
           score: 0
         };
         Object.assign(this.rooms['users'], newData);
