@@ -91,18 +91,14 @@ export default {
   methods: {
     createNewRoom() {
       console.log('masuk method add room', localStorage.getItem('racerName'));
+      let playerKey = localStorage.getItem('racerId')
+      let obj = { [`${playerKey}`] : { name : localStorage.getItem('racerName'), score : 0} }
       this.$db.collection('rooms')
         .add({
           name: this.nama,
           author: localStorage.getItem('racerName'),
           status: 'pending',
-          users: [
-            {
-              id: localStorage.getItem('racerName'),
-              name: localStorage.getItem('racerName'),
-              score: 0,
-            },
-          ],
+          users: obj
         })
         .then((docref) => {
           console.log('berhasil add', docref);

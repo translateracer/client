@@ -1,21 +1,22 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-6">
+      <div class="col-6 offset 3">
         {{currentPlayer.score}}
         {{players}}
-        <div class="progress" v-for="(player,index) in players">
-          <p>
-            <!-- {{player.name}} -->
-          </p>
-          <div
-            v-bind:style="{width : players[index].score+'%'}"
-            class="progress-bar"
-            role="progressbar"
-            aria-valuenow="25"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          ></div>
+        <div v-for="(player,index) in players">
+          <p>{{player.name}}</p>
+          <div class="progress" >
+            
+            <div
+              v-bind:style="{width : player.score+'%'}"
+              class="progress-bar"
+              role="progressbar"
+              aria-valuenow="25"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
         </div>
       </div>
     </div>
@@ -38,7 +39,11 @@
             >
           </div>
           <button type="submit" class="btn btn-primary mb-2">submit</button>
-          <button type="submit" class="btn btn-primary mb-2">next Question</button>
+          <button
+            type="button"
+            class="btn btn-primary mb-2"
+            @click.prevent="skipQuestion"
+          >next Question</button>
         </form>
       </div>
     </div>
@@ -51,7 +56,7 @@ export default {
     return {
       id: this.$router.currentRoute.params.id,
       answer: "",
-
+      userId: localStorage.getItem("racerId"),
       startIndex: 0,
       data: "",
       name: "",
@@ -91,25 +96,31 @@ export default {
         for (let i in this.players) {
           if (this.players[i].score >= 100) {
             let payload = {
-              "status" : "finished"
-            }
-            this.updateRoom(payload)
-            this.$router.replace(`/rooms/${this.id}`)
+              status: "finished"
+            };
+            this.updateRoom(payload);
+            this.$router.replace(`/rooms/${this.id}`);
           }
         }
       });
   },
   methods: {
+    skipQuestion() {
+      this.startIndex += 1;
+    },
     submitAnswer(payload) {
       let obj;
       if (payload.artiBahasa.indexOf(this.answer) !== -1) {
         this.startIndex += 1;
         this.currentPlayer.score += 10;
         let payload = {
-          "users.1.score": this.currentPlayer.score
+          [`users.${this.userId}.score`]: this.currentPlayer.score
         };
+
+        let audio = new Audio("/assets/mp3/car.mp3");
+        audio.play();
+
         this.updateRoom(payload);
-    
       }
     },
     updateRoom(payload) {
@@ -128,7 +139,7 @@ export default {
   },
   computed: {
     currentPlayer() {
-      return this.players[1];
+      return this.players[this.userId];
     },
     activeQuestion() {
       return this.questions[this.startIndex];
